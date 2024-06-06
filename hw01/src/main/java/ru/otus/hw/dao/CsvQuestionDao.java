@@ -25,8 +25,7 @@ public class CsvQuestionDao implements QuestionDao {
         // Использовать QuestionReadException
         // Про ресурсы: https://mkyong.com/java/java-read-a-file-from-resources-folder/
 
-        try {
-            InputStream inputStream = new ClassPathResource(fileNameProvider.getTestFileName()).getInputStream();
+        try (InputStream inputStream = new ClassPathResource(fileNameProvider.getTestFileName()).getInputStream()) {
             return getQuestionsFromCsv(inputStream);
         } catch (IOException e) {
             throw new QuestionReadException("Error while reading questions from file %s".formatted(
