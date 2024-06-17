@@ -13,7 +13,7 @@ public class TestServiceImpl implements TestService {
 
     private final IOService ioService;
 
-    private final QuestionFormatterService questionFormatterService;
+    private final QuestionFormatter questionFormatter;
 
     private final QuestionDao questionDao;
 
@@ -33,7 +33,7 @@ public class TestServiceImpl implements TestService {
     }
 
     private void printQuestion(Question question) {
-        String questionFormattedString = questionFormatterService.format(question);
+        String questionFormattedString = questionFormatter.format(question);
         ioService.printLine(questionFormattedString);
     }
 

@@ -24,7 +24,7 @@ public class TestServiceImplTest {
     private IOService ioService;
 
     @Mock
-    private QuestionFormatterService questionFormatterService;
+    private QuestionFormatter questionFormatter;
 
     @Mock
     private QuestionDao questionDao;
@@ -40,13 +40,13 @@ public class TestServiceImplTest {
         Student student = new Student("Masha", "Ivanova");
 
         given(questionDao.findAll()).willReturn(List.of(question));
-        given(questionFormatterService.format(question)).willReturn("formattedQuestion");
+        given(questionFormatter.format(question)).willReturn("formattedQuestion");
         given(ioService.readIntForRangeWithPrompt(1, question.answers().size(),
                 "Please type the number of correct answer: ",
                 "Your answer does not match any of the possible answers")).willReturn(1);
         TestResult testResult = testService.executeTestFor(student);
 
-        verify(questionFormatterService).format(question);
+        verify(questionFormatter).format(question);
         verify(ioService).printLine("formattedQuestion");
         assertThat(testResult).isNotNull()
                 .matches(t -> t.getRightAnswersCount() == 1)

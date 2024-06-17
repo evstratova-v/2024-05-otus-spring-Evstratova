@@ -1,10 +1,10 @@
 package ru.otus.hw.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.otus.hw.domain.Question;
 
-@Service
-public class QuestionFormatterServiceImpl implements QuestionFormatterService {
+@Component
+public class QuestionFormatterImpl implements QuestionFormatter {
     @Override
     public String format(Question question) {
         StringBuilder stringBuilder = new StringBuilder();
