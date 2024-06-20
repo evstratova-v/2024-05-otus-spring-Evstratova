@@ -1,0 +1,3 @@
+#line for skip
+Is this test question?;Yes%true|No%false|Nobody knows%false
+Is this first test question?;Yes%false|No%true|Questions have no order%false
