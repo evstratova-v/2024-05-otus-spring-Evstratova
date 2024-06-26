@@ -1,23 +1,22 @@
 package ru.otus.hw.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.otus.hw.domain.Student;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(classes = StudentServiceImpl.class)
 public class StudentServiceImplTest {
 
-    @Mock
+    @MockBean
     private LocalizedIOService ioService;
 
-    @InjectMocks
-    private StudentServiceImpl studentService;
+    @Autowired
+    private StudentService studentService;
 
     @Test
     void testDetermineCurrentStudent() {
