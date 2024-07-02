@@ -37,6 +37,8 @@ public class TestServiceImplTest {
                 new Answer("answer1", true),
                 new Answer("answer2", false)));
         Student student = new Student("Masha", "Ivanova");
+        TestResult expectedTestResult = new TestResult(student);
+        expectedTestResult.applyAnswer(question, true);
 
         given(questionDao.findAll()).willReturn(List.of(question));
         given(questionFormatter.format(question)).willReturn("formattedQuestion");
@@ -47,8 +49,6 @@ public class TestServiceImplTest {
 
         verify(questionFormatter).format(question);
         verify(ioService).printLine("formattedQuestion");
-        assertThat(testResult).isNotNull()
-                .matches(t -> t.getRightAnswersCount() == 1)
-                .matches(t -> t.getAnsweredQuestions().equals(List.of(question)));
+        assertThat(testResult).isEqualTo(expectedTestResult);
     }
 }

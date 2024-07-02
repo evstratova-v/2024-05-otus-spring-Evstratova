@@ -9,7 +9,6 @@ import ru.otus.hw.domain.Student;
 import ru.otus.hw.security.LoginStudentContext;
 import ru.otus.hw.service.LocalizedIOService;
 import ru.otus.hw.service.ResultService;
-import ru.otus.hw.service.StudentService;
 import ru.otus.hw.service.TestService;
 
 @ShellComponent(value = "Test Student Application Commands")
@@ -18,8 +17,6 @@ public class ApplicationCommands {
 
     private final LoginStudentContext loginStudentContext;
 
-    private final StudentService studentService;
-
     private final TestService testService;
 
     private final ResultService resultService;
@@ -27,8 +24,8 @@ public class ApplicationCommands {
     private final LocalizedIOService ioService;
 
     @ShellMethod(value = "Login student", key = {"login", "l"})
-    public String loginStudent() {
-        Student student = studentService.determineCurrentStudent();
+    public String loginStudent(String firstName, String lastName) {
+        Student student = new Student(firstName, lastName);
         loginStudentContext.login(student);
         return ioService.getMessage("ApplicationCommands.greeting", student.getFullName());
     }

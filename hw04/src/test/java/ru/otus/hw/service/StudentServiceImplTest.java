@@ -20,10 +20,14 @@ public class StudentServiceImplTest {
 
     @Test
     void testDetermineCurrentStudent() {
-        given(ioService.readStringWithPromptLocalized("StudentService.input.first.name")).willReturn("Masha");
-        given(ioService.readStringWithPromptLocalized("StudentService.input.last.name")).willReturn("Ivanova");
+        String firstName = "Masha";
+        String lastName = "Ivanova";
+        Student expectedStudent = new Student(firstName, lastName);
+
+        given(ioService.readStringWithPromptLocalized("StudentService.input.first.name")).willReturn(firstName);
+        given(ioService.readStringWithPromptLocalized("StudentService.input.last.name")).willReturn(lastName);
 
         Student student = studentService.determineCurrentStudent();
-        assertThat(student).isNotNull().matches(s -> s.getFullName().equals("Masha Ivanova"));
+        assertThat(student).isEqualTo(expectedStudent);
     }
 }
