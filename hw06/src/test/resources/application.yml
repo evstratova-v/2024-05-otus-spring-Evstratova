@@ -10,3 +10,12 @@ spring:
   shell:
     interactive:
       enabled: false
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

@@ -28,18 +28,6 @@ class ModelsCommonTest {
 
     @BeforeAll
     static void setUpAll() {
-        /*
-        Чтобы работало подключить
-        <properties>
-            <reflections.version>0.10.2</reflections.version>
-        </properties>
-
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>${reflections.version}</version>
-        </dependency>
-         */
         var reflections = new Reflections("ru.otus.hw.models");
         entitiesClasses = reflections.getTypesAnnotatedWith(Entity.class);
 
