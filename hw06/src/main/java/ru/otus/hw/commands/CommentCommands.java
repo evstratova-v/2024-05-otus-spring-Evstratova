@@ -8,6 +8,7 @@ import ru.otus.hw.services.CommentService;
 
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 @RequiredArgsConstructor
 @ShellComponent
 public class CommentCommands {
