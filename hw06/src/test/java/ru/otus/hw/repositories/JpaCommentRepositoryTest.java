@@ -99,7 +99,9 @@ public class JpaCommentRepositoryTest {
         em.detach(savedComment);
 
         var actualComment = em.find(Comment.class, savedComment.getId());
-        assertThat(actualComment).isEqualTo(expectedComment);
+        assertThat(actualComment).matches(comment -> comment.getId() == savedComment.getId())
+                .matches(comment -> comment.getText().equals(expectedComment.getText()))
+                .matches(comment -> comment.getBook().equals(expectedBook));
     }
 
     @DisplayName("должен сохранять изменённый комментарий")
@@ -109,12 +111,17 @@ public class JpaCommentRepositoryTest {
         Comment expectedComment = new Comment(1L, "CommentText_1000", expectedBook);
 
         var savedComment = commentRepository.save(expectedComment);
-        assertThat(savedComment).isEqualTo(expectedComment);
+        assertThat(savedComment).matches(comment -> comment.getId() == expectedComment.getId())
+                .matches(comment -> comment.getText().equals(expectedComment.getText()))
+                .matches(comment -> comment.getBook().equals(expectedBook));
+
         em.flush();
         em.detach(savedComment);
 
         var actualComment = em.find(Comment.class, savedComment.getId());
-        assertThat(actualComment).isEqualTo(expectedComment);
+        assertThat(actualComment).matches(comment -> comment.getId() == expectedComment.getId())
+                .matches(comment -> comment.getText().equals(expectedComment.getText()))
+                .matches(comment -> comment.getBook().equals(expectedBook));
     }
 
     @DisplayName("должен удалять комментарий по id")
