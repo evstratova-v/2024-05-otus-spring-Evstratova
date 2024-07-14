@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
@@ -76,8 +75,7 @@ public class CommentServiceImplTest {
     @Test
     void shouldSaveNewComment() {
         var actualCommentDto = commentService.insert("CommentText_1000", dbBooks.get(0).getId());
-        var expectedCommentDto = new CommentDto(commentsDto.size() + 1, "CommentText_1000",
-                BookDto.toDto(dbBooks.get(0)));
+        var expectedCommentDto = new CommentDto(commentsDto.size() + 1, "CommentText_1000");
 
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
@@ -86,8 +84,7 @@ public class CommentServiceImplTest {
     @Test
     void shouldSaveUpdatedComment() {
         var actualCommentDto = commentService.update(1L, "CommentText_1000", dbBooks.get(2).getId());
-        var expectedCommentDto = new CommentDto(1L, "CommentText_1000",
-                BookDto.toDto(dbBooks.get(2)));
+        var expectedCommentDto = new CommentDto(1L, "CommentText_1000");
 
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
