@@ -12,12 +12,9 @@ public class CommentDto {
 
     private String text;
 
-    private long bookId;
-
-    private String bookTitle;
+    private BookDto book;
 
     public static CommentDto toDto(Comment comment) {
-        return new CommentDto(comment.getId(), comment.getText(), comment.getBook().getId(),
-                comment.getBook().getTitle());
+        return new CommentDto(comment.getId(), comment.getText(), BookDto.toDto(comment.getBook()));
     }
 }

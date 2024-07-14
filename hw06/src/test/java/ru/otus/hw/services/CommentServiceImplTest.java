@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.CommentDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
@@ -76,7 +77,7 @@ public class CommentServiceImplTest {
     void shouldSaveNewComment() {
         var actualCommentDto = commentService.insert("CommentText_1000", dbBooks.get(0).getId());
         var expectedCommentDto = new CommentDto(commentsDto.size() + 1, "CommentText_1000",
-                dbBooks.get(0).getId(), dbBooks.get(0).getTitle());
+                BookDto.toDto(dbBooks.get(0)));
 
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
@@ -86,7 +87,7 @@ public class CommentServiceImplTest {
     void shouldSaveUpdatedComment() {
         var actualCommentDto = commentService.update(1L, "CommentText_1000", dbBooks.get(2).getId());
         var expectedCommentDto = new CommentDto(1L, "CommentText_1000",
-                dbBooks.get(2).getId(), dbBooks.get(2).getTitle());
+                BookDto.toDto(dbBooks.get(2)));
 
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
@@ -136,7 +137,7 @@ public class CommentServiceImplTest {
     private static List<CommentDto> getCommentsDto() {
         var dbAuthors = getDbAuthors();
         var dbGenres = getDbGenres();
-        var dbBooks =  getDbBooks(dbAuthors, dbGenres);
+        var dbBooks = getDbBooks(dbAuthors, dbGenres);
         return getCommentsDto(dbBooks);
     }
 }

@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -20,7 +22,6 @@ import ru.otus.hw.repositories.JpaBookRepository;
 import ru.otus.hw.repositories.JpaGenreRepository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -78,10 +79,9 @@ public class BookServiceImplTest {
         var actualBookDto = bookService.insert("BookTitle_10500", dbAuthors.get(0).getId(),
                 Set.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
 
-        var expectedBookDto = new BookDto(dtoBooks.size() + 1, "BookTitle_10500", dbAuthors.get(0).getId(),
-                dbAuthors.get(0).getFullName(), Map.of(
-                dbGenres.get(0).getId(), dbGenres.get(0).getName(),
-                dbGenres.get(2).getId(), dbGenres.get(2).getName()));
+        var expectedBookDto = new BookDto(dtoBooks.size() + 1, "BookTitle_10500",
+                AuthorDto.toDto(dbAuthors.get(0)),
+                List.of(GenreDto.toDto(dbGenres.get(0)), GenreDto.toDto(dbGenres.get(2))));
         assertThat(actualBookDto).isEqualTo(expectedBookDto);
     }
 
@@ -92,10 +92,9 @@ public class BookServiceImplTest {
                 Set.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
 
 
-        var expectedBookDto = new BookDto(FIRST_BOOK_ID, "BookTitle_10500", dbAuthors.get(0).getId(),
-                dbAuthors.get(0).getFullName(), Map.of(
-                dbGenres.get(0).getId(), dbGenres.get(0).getName(),
-                dbGenres.get(2).getId(), dbGenres.get(2).getName()));
+        var expectedBookDto = new BookDto(FIRST_BOOK_ID, "BookTitle_10500",
+                AuthorDto.toDto(dbAuthors.get(0)),
+                List.of(GenreDto.toDto(dbGenres.get(0)), GenreDto.toDto(dbGenres.get(2))));
 
         assertThat(actualBookDto).isEqualTo(expectedBookDto);
     }

@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 @Component
 public class BookConverter {
     public String bookToString(BookDto bookDto) {
-        var genresString = bookDto.getGenres().entrySet().stream()
-                .map(entry -> "{Id: %d, Name: %s}".formatted(entry.getKey(), entry.getValue()))
+        var genresString = bookDto.getGenres().stream()
+                .map(genreDto -> "{Id: %d, Name: %s}".formatted(genreDto.getId(), genreDto.getName()))
                 .collect(Collectors.joining(", "));
         return "Id: %d, title: %s, author: {Id: %d, FullName: %s}, genres: [%s]".formatted(
                 bookDto.getId(),
                 bookDto.getTitle(),
-                bookDto.getAuthorId(),
-                bookDto.getAuthorFullName(),
+                bookDto.getAuthor().getId(),
+                bookDto.getAuthor().getFullName(),
                 genresString);
     }
 }
