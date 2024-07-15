@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 @DataJpaTest
 @Import({CommentServiceImpl.class, JpaCommentRepository.class, JpaBookRepository.class})
 @Transactional(propagation = Propagation.NEVER)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CommentServiceImplTest {
 
     @Autowired
@@ -71,6 +70,7 @@ public class CommentServiceImplTest {
                 .isEqualTo(expectedCommentsDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять новый комментарий")
     @Test
     void shouldSaveNewComment() {
@@ -80,6 +80,7 @@ public class CommentServiceImplTest {
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять изменённый комментарий")
     @Test
     void shouldSaveUpdatedComment() {
@@ -89,6 +90,7 @@ public class CommentServiceImplTest {
         assertThat(actualCommentDto).isEqualTo(expectedCommentDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен удалять комментарий по id")
     @Test
     void shouldDeleteComment() {

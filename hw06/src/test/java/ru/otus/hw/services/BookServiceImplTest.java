@@ -32,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 @DataJpaTest
 @Import({BookServiceImpl.class, JpaAuthorRepository.class, JpaGenreRepository.class, JpaBookRepository.class})
 @Transactional(propagation = Propagation.NEVER)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class BookServiceImplTest {
 
     private static final long FIRST_BOOK_ID = 1L;
@@ -73,6 +72,7 @@ public class BookServiceImplTest {
         assertThat(actualBooksDto).isEqualTo(expectedBooksDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
@@ -85,6 +85,7 @@ public class BookServiceImplTest {
         assertThat(actualBookDto).isEqualTo(expectedBookDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
@@ -99,6 +100,7 @@ public class BookServiceImplTest {
         assertThat(actualBookDto).isEqualTo(expectedBookDto);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен удалять книгу по id")
     @Test
     void shouldDeleteBook() {
