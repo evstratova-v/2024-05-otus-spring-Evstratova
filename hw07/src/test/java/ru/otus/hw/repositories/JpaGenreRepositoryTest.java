@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы с жанрами ")
 @DataJpaTest
-@Import(JpaGenreRepository.class)
 public class JpaGenreRepositoryTest {
 
     @Autowired
@@ -32,7 +30,7 @@ public class JpaGenreRepositoryTest {
     @DisplayName("должен возвращать список жанров по нескольким id")
     @Test
     void shouldReturnCorrectGenreById() {
-        var actualGenres = genreRepository.findAllByIds(Set.of(1L, 5L, 6L));
+        var actualGenres = genreRepository.findAllById(Set.of(1L, 5L, 6L));
         var expectedGenres = List.of(dbGenres.get(0), dbGenres.get(4), dbGenres.get(5));
 
         assertThat(actualGenres).containsExactlyElementsOf(expectedGenres);

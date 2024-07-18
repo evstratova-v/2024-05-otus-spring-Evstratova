@@ -17,9 +17,6 @@ import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
-import ru.otus.hw.repositories.JpaAuthorRepository;
-import ru.otus.hw.repositories.JpaBookRepository;
-import ru.otus.hw.repositories.JpaGenreRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -30,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DisplayName("Сервис для работы с книгами ")
 @DataJpaTest
-@Import({BookServiceImpl.class, JpaAuthorRepository.class, JpaGenreRepository.class, JpaBookRepository.class})
+@Import({BookServiceImpl.class})
 @Transactional(propagation = Propagation.NEVER)
 public class BookServiceImplTest {
 
