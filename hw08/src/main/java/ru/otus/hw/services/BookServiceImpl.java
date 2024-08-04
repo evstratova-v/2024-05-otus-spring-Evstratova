@@ -2,12 +2,14 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
+import ru.otus.hw.models.BookWithoutComments;
+import ru.otus.hw.models.Comment;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
+import ru.otus.hw.repositories.BookWithoutCommentsRepository;
+import ru.otus.hw.repositories.CommentRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
@@ -25,49 +27,77 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
-    @Transactional(readOnly = true)
+    private final BookWithoutCommentsRepository bookWithoutCommentsRepository;
+
+    private final CommentRepository commentRepository;
+
     @Override
-    public Optional<BookDto> findById(long id) {
-        return bookRepository.findById(id).map(BookDto::toDto);
+    public Optional<Book> findById(String id) {
+        return bookRepository.findById(id);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<BookDto> findAll() {
-        return bookRepository.findAll().stream().map(BookDto::toDto).toList();
+    public List<BookWithoutComments> findAll() {
+        return bookWithoutCommentsRepository.findAll();
     }
 
-    @Transactional
     @Override
-    public BookDto insert(String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(0, title, authorId, genresIds));
+    public Book insert(String title, String authorId, Set<String> genresIds) {
+        return save(title, authorId, genresIds);
     }
 
-    @Transactional
     @Override
-    public BookDto update(long id, String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(id, title, authorId, genresIds));
+    public Book update(String id, String title, String authorId, Set<String> genresIds) {
+        return save(id, title, authorId, genresIds);
     }
 
-    @Transactional
     @Override
-    public void deleteById(long id) {
+    public Book update(String id, Comment comment) {
+        return save(id, comment);
+    }
+
+    @Override
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
     }
 
-    private Book save(long id, String title, long authorId, Set<Long> genresIds) {
+    private Book save(String id, Comment comment) {
+        var book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id %s not found".formatted(id)));
+        book.getComments().add(comment);
+        return bookRepository.save(book);
+    }
+
+    private Book save(String id, String title, String authorId, Set<String> genresIds) {
         if (isEmpty(genresIds)) {
             throw new IllegalArgumentException("Genres ids must not be null");
         }
 
         var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
+        var genres = genreRepository.findAllById(genresIds);
+        if (isEmpty(genres) || genresIds.size() != genres.size()) {
+            throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
+        }
+        var comments = commentRepository.findByBookId(id);
+
+        var book = new Book(id, title, author, genres, comments);
+        return bookRepository.save(book);
+    }
+
+    private Book save(String title, String authorId, Set<String> genresIds) {
+        if (isEmpty(genresIds)) {
+            throw new IllegalArgumentException("Genres ids must not be null");
+        }
+
+        var author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %s not found".formatted(authorId)));
         var genres = genreRepository.findAllById(genresIds);
         if (isEmpty(genres) || genresIds.size() != genres.size()) {
             throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
         }
 
-        var book = new Book(id, title, author, genres);
+        var book = new Book(title, author, genres);
         return bookRepository.save(book);
     }
 }

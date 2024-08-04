@@ -2,22 +2,46 @@ package ru.otus.hw.converters;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.models.Book;
+import ru.otus.hw.models.BookWithoutComments;
 
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class BookConverter {
-    public String bookToString(BookDto bookDto) {
-        var genresString = bookDto.getGenres().stream()
-                .map(genreDto -> "{Id: %d, Name: %s}".formatted(genreDto.getId(), genreDto.getName()))
+    private final AuthorConverter authorConverter;
+
+    private final GenreConverter genreConverter;
+
+    private final CommentConverter commentConverter;
+
+    public String bookWithoutCommentsToString(BookWithoutComments book) {
+        var genresString = book.getGenres().stream()
+                .map(genreConverter::genreToString)
+                .map("{%s}"::formatted)
                 .collect(Collectors.joining(", "));
-        return "Id: %d, title: %s, author: {Id: %d, FullName: %s}, genres: [%s]".formatted(
-                bookDto.getId(),
-                bookDto.getTitle(),
-                bookDto.getAuthor().getId(),
-                bookDto.getAuthor().getFullName(),
+        return "Id: %s, title: %s, author: {%s}, genres: [%s]".formatted(
+                book.getId(),
+                book.getTitle(),
+                authorConverter.authorToString(book.getAuthor()),
                 genresString);
+    }
+
+    public String bookToString(Book book) {
+        var genresString = book.getGenres().stream()
+                .map(genreConverter::genreToString)
+                .map("{%s}"::formatted)
+                .collect(Collectors.joining(", "));
+        var commentsString = book.getComments().stream()
+                .map(commentConverter::commentToString)
+                .map("{%s}"::formatted)
+                .collect(Collectors.joining(",\n"));
+        return "Id: %s, title: %s, author: {%s}, genres: [%s],\ncomments:\n[%s]".formatted(
+                book.getId(),
+                book.getTitle(),
+                authorConverter.authorToString(book.getAuthor()),
+                genresString,
+                commentsString);
     }
 }

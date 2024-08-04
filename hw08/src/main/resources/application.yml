@@ -1,18 +1,35 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:maindb
-  sql:
-    init:
-      mode: never
-  liquibase:
-    enabled: true
-    change-log: classpath:/db/changelog/db.changelog-master.yaml
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mongodbHomework
 
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+    command:
+      version:
+        enabled: false
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concert:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    root: ERROR
