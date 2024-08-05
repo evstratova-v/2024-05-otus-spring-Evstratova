@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
 
@@ -71,6 +72,7 @@ public class CommentRepositoryTest {
         assertThat(actualBookId).isEqualTo(expectedBookId);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять новый комментарий")
     @Test
     void shouldSaveNewComment() {
@@ -89,6 +91,7 @@ public class CommentRepositoryTest {
                 .matches(comment -> comment.getBook().getId().equals(expectedBook.getId()));
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять изменённый комментарий")
     @Test
     void shouldSaveUpdatedComment() {
@@ -108,6 +111,7 @@ public class CommentRepositoryTest {
                 .matches(comment -> comment.getBook().getId().equals(expectedBook.getId()));
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен удалять комментарий по id")
     @Test
     void shouldDeleteComment() {

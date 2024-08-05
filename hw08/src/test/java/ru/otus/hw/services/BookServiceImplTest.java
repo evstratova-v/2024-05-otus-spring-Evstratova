@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
@@ -65,6 +66,7 @@ public class BookServiceImplTest {
                 .isEqualTo(expectedBooks);
     }
 
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
@@ -78,14 +80,13 @@ public class BookServiceImplTest {
                 .matches(b -> b.getGenres().equals(expectedGenres))
                 .matches(b -> b.getComments().isEmpty());
         assertThat(actualBook.getGenres()).usingRecursiveComparison().isEqualTo(expectedGenres);
-        ;
     }
 
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
         var expectedGenres = List.of(dbGenres.get(0), dbGenres.get(2));
-        var exptectedComments = dbBooks.get(0).getComments();
+        var commentsBeforeUpdate = dbBooks.get(0).getComments();
 
         var actualBook = bookService.update(dbBooks.get(0).getId(), "BookTitle_10500", dbAuthors.get(0).getId(),
                 Set.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
@@ -93,15 +94,16 @@ public class BookServiceImplTest {
         assertThat(actualBook).isNotNull().matches(b -> b.getTitle().equals("BookTitle_10500"))
                 .matches(b -> b.getAuthor().equals(dbAuthors.get(0)))
                 .matches(b -> b.getGenres().size() == 2)
-                .matches(b -> b.getGenres().equals(expectedGenres))
-                .matches(b -> b.getComments().size() == exptectedComments.size());
+                .matches(b -> b.getGenres().equals(expectedGenres));
 
         assertThat(actualBook.getGenres())
                 .usingRecursiveComparison()
                 .isEqualTo(expectedGenres);
-        assertThat(actualBook.getComments())
+
+        var actualBookWithComments = mongoTemplate.findById(actualBook.getId(), Book.class);
+        assertThat(actualBookWithComments.getComments())
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("book")
-                .isEqualTo(exptectedComments);
+                .isEqualTo(commentsBeforeUpdate);
     }
 
     @DisplayName("должен удалять книгу по id")

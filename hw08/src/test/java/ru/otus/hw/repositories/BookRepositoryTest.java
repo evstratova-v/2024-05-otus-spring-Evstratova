@@ -5,9 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import ru.otus.hw.events.MongoBooksCascadeDeleteEventsListener;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
@@ -19,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("BookRepositoryTest для работы с книгами с listener-ами в контексте ")
 @DataMongoTest
-@Import(MongoBooksCascadeDeleteEventsListener.class)
 class BookRepositoryTest {
 
     @Autowired
@@ -123,15 +120,15 @@ class BookRepositoryTest {
     void shouldDeleteBook() {
         var book = dbBooks.get(0);
         var commentsBeforeDelete = mongoTemplate.findAll(Comment.class);
-        List<String> commentsIds = List.of(commentsBeforeDelete.get(0).getId(), commentsBeforeDelete.get(1).getId());
+        List<String> commentsIds = book.getComments().stream().map(Comment::getId).toList();
 
-        bookRepository.deleteById(book.getId());
+        bookRepository.deleteByIdWithComments(book.getId());
         var deletedBook = mongoTemplate.findById(book.getId(), Book.class);
         assertThat(deletedBook).isNull();
 
         var commentsAfterDelete = mongoTemplate.findAll(Comment.class);
         assertThat(commentsAfterDelete)
-                .matches(comments -> commentsBeforeDelete.size() - 2 == comments.size());
+                .matches(comments -> commentsBeforeDelete.size() - commentsIds.size() == comments.size());
         commentsIds.forEach(commentId -> assertThat(mongoTemplate.findById(commentId, Comment.class)).isNull());
     }
 }

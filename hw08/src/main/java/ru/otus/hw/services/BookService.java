@@ -15,9 +15,9 @@ public interface BookService {
 
     Book insert(String title, String authorId, Set<String> genresIds);
 
-    Book update(String id, String title, String authorId, Set<String> genresIds);
+    BookWithoutComments update(String id, String title, String authorId, Set<String> genresIds);
 
-    Book update(String id, Comment comment);
+    BookWithoutComments update(String id, Comment comment);
 
     void deleteById(String id);
 }

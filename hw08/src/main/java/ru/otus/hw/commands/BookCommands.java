@@ -43,7 +43,7 @@ public class BookCommands {
     @ShellMethod(value = "Update book", key = "bupd")
     public String updateBook(String id, String title, String authorId, Set<String> genresIds) {
         var savedBook = bookService.update(id, title, authorId, genresIds);
-        return bookConverter.bookToString(savedBook);
+        return bookConverter.bookWithoutCommentsToString(savedBook);
     }
 
     // bdel 4
