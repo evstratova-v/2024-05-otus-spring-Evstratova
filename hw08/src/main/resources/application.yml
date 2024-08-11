@@ -1,0 +1,35 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mongodbHomework
+
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+    command:
+      version:
+        enabled: false
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.mongock.changelog
+  mongo-db:
+    write-concert:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    root: ERROR
