@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.BookDto;
+import ru.otus.hw.dto.ShortBookDto;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
@@ -33,6 +34,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
+    public Optional<ShortBookDto> findShortBookById(long id) {
+        return bookRepository.findById(id).map(ShortBookDto::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(BookDto::toDto).toList();
     }
@@ -45,8 +52,20 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    public BookDto insert(ShortBookDto shortBookDto) {
+        return BookDto.toDto(save(shortBookDto));
+    }
+
+    @Transactional
+    @Override
     public BookDto update(long id, String title, long authorId, Set<Long> genresIds) {
         return BookDto.toDto(save(id, title, authorId, genresIds));
+    }
+
+    @Transactional
+    @Override
+    public BookDto update(ShortBookDto shortBookDto) {
+        return BookDto.toDto(save(shortBookDto));
     }
 
     @Transactional
@@ -68,6 +87,21 @@ public class BookServiceImpl implements BookService {
         }
 
         var book = new Book(id, title, author, genres);
+        return bookRepository.save(book);
+    }
+
+    private Book save(ShortBookDto shortBookDto) {
+        long authorId = shortBookDto.getAuthorId();
+        var author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
+
+        var genresIds = shortBookDto.getGenresIds();
+        var genres = genreRepository.findAllById(genresIds);
+        if (isEmpty(genres) || genresIds.size() != genres.size()) {
+            throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
+        }
+
+        var book = new Book(shortBookDto.getId(), shortBookDto.getTitle(), author, genres);
         return bookRepository.save(book);
     }
 }
