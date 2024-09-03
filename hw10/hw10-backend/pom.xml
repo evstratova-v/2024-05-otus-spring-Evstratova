@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw09-spring-mvc-view</artifactId>
+    <artifactId>hw10-spring-mvc-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-mvc-view-homework</name>
+    <name>spring-mvc-rest-homework</name>
 
     <properties>
         <java.version>17</java.version>
