@@ -1,7 +1,8 @@
 package ru.otus.hw.controllers;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,9 +19,10 @@ public class RedirectControllerTest {
     private MockMvc mvc;
 
     @DisplayName("должен направлять любые запросы на главную страницу")
-    @Test
-    void shouldRedirect() throws Exception {
-        mvc.perform(get("/test")).andExpect(status().is3xxRedirection())
+    @ParameterizedTest
+    @ValueSource(strings = {"/test", "/add", "/edit/1"})
+    void shouldRedirect(String urlTemplate) throws Exception {
+        mvc.perform(get(urlTemplate)).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }
 }
