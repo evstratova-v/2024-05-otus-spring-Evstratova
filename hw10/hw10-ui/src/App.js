@@ -4,7 +4,7 @@ import Edit from "./components/Edit";
 import List from "./components/List";
 import Add from "./components/Add";
 
-export default function App() {
+const App = () => {
     return (
         <BrowserRouter>
             <Routes>
@@ -14,3 +14,5 @@ export default function App() {
             </Routes>
         </BrowserRouter>);
 }
+
+export default App;
