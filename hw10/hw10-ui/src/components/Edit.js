@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate, useParams} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {editBookByApi, getBookByIdFromApi} from "../services/BookService";
+import {getAuthorsFromApi} from "../services/AuthorService";
+import {getGenresFromApi} from "../services/GenreService";
 
 const styles = {
     label: {
@@ -22,7 +25,7 @@ const styles = {
     }
 }
 
-export default function Edit() {
+const Edit = () => {
 
     const {id} = useParams();
 
@@ -41,30 +44,19 @@ export default function Edit() {
     } = useForm({mode: "onBlur"});
 
     useEffect(() => {
-        fetch('/api/v1/book/' + id)
-            .then(response => response.json())
+        getBookByIdFromApi(id)
             .then(data => setBook(data))
 
-        fetch('/api/v1/author')
-            .then(response => response.json())
+        getAuthorsFromApi()
             .then(data => setAuthors(data))
 
-        fetch('/api/v1/genre')
-            .then(response => response.json())
+        getGenresFromApi()
             .then(data => setGenres(data))
     }, []);
 
     const editBook = (e) => {
         console.log("Редактируем книгу: " + JSON.stringify(book))
-        fetch("/api/v1/book", {
-            method: "PUT",
-            body: JSON.stringify(book),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-
-        })
+        editBookByApi(book)
             .then(response => {
                 if (response.ok) {
                     navigate("/")
@@ -153,3 +145,5 @@ export default function Edit() {
         </form>
     );
 }
+
+export default Edit;

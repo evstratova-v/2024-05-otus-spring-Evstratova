@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {createBookByApi} from "../services/BookService";
+import {getAuthorsFromApi} from "../services/AuthorService";
+import {getGenresFromApi} from "../services/GenreService";
 
 const styles = {
     label: {
@@ -22,7 +25,7 @@ const styles = {
     }
 }
 
-export default function Add() {
+const Add = () => {
 
     const [book, setBook] = useState({title: "", authorId: 0, genresIds: []});
 
@@ -39,27 +42,17 @@ export default function Add() {
     } = useForm({mode: "onBlur"});
 
     useEffect(() => {
-        fetch('/api/v1/author')
-            .then(response => response.json())
+        getAuthorsFromApi()
             .then(data => setAuthors(data))
 
 
-        fetch('/api/v1/genre')
-            .then(response => response.json())
+        getGenresFromApi()
             .then(data => setGenres(data))
     }, []);
 
     const createBook = () => {
         console.log("Создаём книгу: " + JSON.stringify(book));
-        fetch("/api/v1/book", {
-            method: "POST",
-            body: JSON.stringify(book),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-
-        })
+        createBookByApi(book)
             .then(response => {
                 if (response.ok) {
                     navigate("/")
@@ -148,3 +141,5 @@ export default function Add() {
         </form>
     );
 }
+
+export default Add;
