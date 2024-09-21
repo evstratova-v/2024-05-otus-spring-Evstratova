@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Контроллер по работе с книгами ")
 @WebMvcTest(BookController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class BookControllerTest {
 
     @Autowired
@@ -119,7 +121,7 @@ public class BookControllerTest {
     void shouldEditBook() throws Exception {
         var book = shortBooks.get(0);
 
-        mvc.perform(post("/edit", 1L)
+        mvc.perform(post("/edit")
                         .param("id", "1")
                         .flashAttr("book", book))
                 .andExpect(status().is3xxRedirection())
