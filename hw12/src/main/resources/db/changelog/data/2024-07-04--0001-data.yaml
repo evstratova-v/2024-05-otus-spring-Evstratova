@@ -82,3 +82,87 @@ databaseChangeLog:
         quotChar: '"'
         encoding: UTF-8
         tableName: users
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-roles
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--roles.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: roles
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-users_roles
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--users_roles.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: users_roles
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-acl_class
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--acl_class.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_class
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-acl_sid
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--acl_sid.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_sid
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-acl_object_identity
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--acl_object_identity.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_object_identity
+
+  - changeSet:
+      id: 2024-09-29--0001-test-data-acl_entry
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-09-29--acl_entry.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: acl_entry

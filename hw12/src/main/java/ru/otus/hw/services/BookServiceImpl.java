@@ -1,6 +1,11 @@
 package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.acls.model.Permission;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.BookDto;
@@ -10,7 +15,9 @@ import ru.otus.hw.models.Book;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
+import ru.otus.hw.security.AclServiceWrapperService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +33,8 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
+    private final AclServiceWrapperService aclServiceWrapperService;
+
     @Transactional(readOnly = true)
     @Override
     public Optional<BookDto> findById(long id) {
@@ -33,15 +42,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ADMIN') || hasPermission(#id, 'ru.otus.hw.dto.ShortBookDto', 'READ')")
     @Override
     public Optional<ShortBookDto> findShortBookById(long id) {
         return bookRepository.findById(id).map(ShortBookDto::toDto);
     }
 
     @Transactional(readOnly = true)
+    @PostFilter("hasRole('ADMIN') or hasPermission(T(ru.otus.hw.dto.ShortBookDto).toDto(filterObject), 'READ')")
     @Override
     public List<BookDto> findAll() {
-        return bookRepository.findAll().stream().map(BookDto::toDto).toList();
+        return new ArrayList<>(bookRepository.findAll().stream().map(BookDto::toDto).toList());
     }
 
     @Transactional
@@ -51,6 +62,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional
+    @Secured({"ROLE_ADMIN", "ROLE_PUBLISHER"})
     @Override
     public BookDto insert(ShortBookDto shortBookDto) {
         return BookDto.toDto(save(shortBookDto));
@@ -63,12 +75,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ADMIN') || hasPermission(#shortBookDto, 'WRITE')")
     @Override
     public BookDto update(ShortBookDto shortBookDto) {
         return BookDto.toDto(save(shortBookDto));
     }
 
     @Transactional
+    @Secured("ROLE_ADMIN")
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
@@ -102,6 +116,19 @@ public class BookServiceImpl implements BookService {
         }
 
         var book = new Book(shortBookDto.getId(), shortBookDto.getTitle(), author, genres);
-        return bookRepository.save(book);
+        boolean isNewBook = book.getId() == 0;
+        book = bookRepository.save(book);
+        if (isNewBook) {
+            createPermissionForBook(ShortBookDto.toDto(book));
+        }
+        return book;
+    }
+
+    private void createPermissionForBook(ShortBookDto shortBookDto) {
+        Set<Permission> permissions = Set.of(
+                BasePermission.READ,
+                BasePermission.WRITE
+        );
+        aclServiceWrapperService.createPermission(shortBookDto, permissions);
     }
 }

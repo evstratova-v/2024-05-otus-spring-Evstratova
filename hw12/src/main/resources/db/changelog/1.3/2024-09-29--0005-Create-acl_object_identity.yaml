@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0005-Create-acl_object_identity
+      author: evstratova-v
+      createTable:
+        tableName: acl_object_identity
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+                nullable: false
+                autoIncrement: true
+          - column:
+              name: object_id_class
+              type: bigint
+              constraints:
+                nullable: false
+                foreignKeyName: foreign_fk_2
+                references: acl_class(id)
+                deleteCascade: true
+                unique: true
+                uniqueConstraintName: unique_uk_3
+          - column:
+              name: object_id_identity
+              type: bigint
+              constraints:
+                nullable: false
+                unique: true
+                uniqueConstraintName: unique_uk_3
+          - column:
+              name: parent_object
+              type: bigint
+              constraints:
+                foreignKeyName: foreign_fk_1
+                references: acl_object_identity(id)
+          - column:
+              name: owner_sid
+              type: bigint
+              constraints:
+                foreignKeyName: foreign_fk_3
+                references: acl_sid(id)
+                deleteCascade: true
+          - column:
+              name: entries_inheriting
+              type: boolean
+              constraints:
+                nullable: false

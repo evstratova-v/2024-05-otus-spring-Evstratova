@@ -1,3 +1,6 @@
 username;password
-user1;$2a$10$pocRoV8nSSy2Dg3Fcvic8OxvbpA5yQVQTDjRLI7A2XqCMnSz4.K9O
-user2;$2a$10$mMvJtfWON3ZC0CL1Iw/.5O/GJG.hPZexegVuzVUvpwC4/zCrOYVvG
+reader1;$2a$10$pocRoV8nSSy2Dg3Fcvic8OxvbpA5yQVQTDjRLI7A2XqCMnSz4.K9O
+reader2;$2a$10$mMvJtfWON3ZC0CL1Iw/.5O/GJG.hPZexegVuzVUvpwC4/zCrOYVvG
+reader_and_publisher;$2a$10$JNtJTeIfidqJwjopWrfMXupVedWkKpUDnDunFp2Aj3.7BEIcndlHu
+publisher;$2a$10$Duuq23RQnakgs0mfpqg29eK9Um74gyWzxYdRGKSDx7xfeoGTJxCCe
+admin;$2a$10$pCnYvFzF71nZVraR8/NMy.NTy6gqY0tfkhSkDHNapqVzJqZCsh0uS

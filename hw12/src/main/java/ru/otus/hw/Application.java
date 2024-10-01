@@ -12,8 +12,12 @@ public class Application {
 				"http://localhost:8080");
 		System.out.println("""
                 Пользователи:
-                user1 : password1
-                user2 : password2""");
+                reader1 : password1
+                reader2 : password2
+                reader_and_publisher : password3
+                publisher : password4
+                admin : password5
+                Описание ролей см. в readme""");
 	}
 
 }

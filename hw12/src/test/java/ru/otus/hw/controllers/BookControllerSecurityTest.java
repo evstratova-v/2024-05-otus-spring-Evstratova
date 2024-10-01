@@ -44,8 +44,8 @@ public class BookControllerSecurityTest {
     @Autowired
     private MockMvc mvc;
 
-    @WithMockUser
-    @DisplayName("должен предоставлять доступ к ресурсам для аутентифицированного пользователя, method = GET")
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("должен предоставлять доступ к ресурсам для пользователя с ролью ADMIN, method = GET")
     @Test
     void shouldStatusOkForAuthenticatedUser() throws Exception {
         var book = new ShortBookDto(1L, "BookTitle_1", 1L, List.of(1L, 2L));
@@ -59,8 +59,8 @@ public class BookControllerSecurityTest {
                 .andExpect(status().isOk());
     }
 
-    @WithMockUser
-    @DisplayName("должен предоставлять доступ к ресурсам для аутентифицированного пользователя, method = POST")
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("должен предоставлять доступ к ресурсам для пользователя с ролью ADMIN, method = POST")
     @Test
     void shouldStatusRedirectionForAuthenticatedUser() throws Exception {
         var editBook = new ShortBookDto(1L, "BookTitle_1", 1L, List.of(1L, 2L));

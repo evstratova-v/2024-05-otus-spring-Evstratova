@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0002-Create-users_roles
+      author: evstratova-v
+      createTable:
+        tableName: users_roles
+        columns:
+          - column:
+              name: user_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                foreignKeyName: fk_users_roles_users
+                references: users(id)
+                deleteCascade: true
+          - column:
+              name: role_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                foreignKeyName: fk_users_roles_roles
+                references: roles(id)
+                deleteCascade: true

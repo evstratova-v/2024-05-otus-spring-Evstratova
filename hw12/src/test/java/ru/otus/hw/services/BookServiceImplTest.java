@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,6 +18,7 @@ import ru.otus.hw.dto.GenreDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
+import ru.otus.hw.security.AclServiceWrapperService;
 
 import java.util.List;
 import java.util.Set;
@@ -35,6 +37,9 @@ public class BookServiceImplTest {
 
     @Autowired
     private BookService bookService;
+
+    @MockBean
+    private AclServiceWrapperService aclServiceWrapperService;
 
     private List<Author> dbAuthors;
 

@@ -24,7 +24,9 @@ public class SecurityConfiguration {
                         (session) -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
                 .authorizeHttpRequests(
-                        (authorize) -> authorize.anyRequest().authenticated()
+                        (authorize) -> authorize
+                                .requestMatchers("/add", "/edit/*").hasAnyRole("PUBLISHER", "ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .rememberMe(
