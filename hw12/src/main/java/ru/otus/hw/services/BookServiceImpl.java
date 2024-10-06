@@ -1,7 +1,6 @@
 package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.acls.domain.BasePermission;
@@ -36,72 +35,38 @@ public class BookServiceImpl implements BookService {
     private final AclServiceWrapperService aclServiceWrapperService;
 
     @Transactional(readOnly = true)
-    @Override
-    public Optional<BookDto> findById(long id) {
-        return bookRepository.findById(id).map(BookDto::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    @PreAuthorize("hasRole('ADMIN') || hasPermission(#id, 'ru.otus.hw.dto.ShortBookDto', 'READ')")
+    @PreAuthorize("hasRole('ADMIN') || hasPermission(#id, 'ru.otus.hw.models.Book', 'READ')")
     @Override
     public Optional<ShortBookDto> findShortBookById(long id) {
         return bookRepository.findById(id).map(ShortBookDto::toDto);
     }
 
     @Transactional(readOnly = true)
-    @PostFilter("hasRole('ADMIN') or hasPermission(T(ru.otus.hw.dto.ShortBookDto).toDto(filterObject), 'READ')")
+    @PostFilter("hasRole('ADMIN') or hasPermission(filterObject.getId(), 'ru.otus.hw.models.Book', 'READ')")
     @Override
     public List<BookDto> findAll() {
         return new ArrayList<>(bookRepository.findAll().stream().map(BookDto::toDto).toList());
     }
 
     @Transactional
-    @Override
-    public BookDto insert(String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(0, title, authorId, genresIds));
-    }
-
-    @Transactional
-    @Secured({"ROLE_ADMIN", "ROLE_PUBLISHER"})
+    @PreAuthorize("hasAnyRole('ADMIN', 'PUBLISHER')")
     @Override
     public BookDto insert(ShortBookDto shortBookDto) {
         return BookDto.toDto(save(shortBookDto));
     }
 
     @Transactional
-    @Override
-    public BookDto update(long id, String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(id, title, authorId, genresIds));
-    }
-
-    @Transactional
-    @PreAuthorize("hasRole('ADMIN') || hasPermission(#shortBookDto, 'WRITE')")
+    @PreAuthorize("hasRole('ADMIN') || hasPermission(#shortBookDto.getId(), 'ru.otus.hw.models.Book', 'WRITE')")
     @Override
     public BookDto update(ShortBookDto shortBookDto) {
         return BookDto.toDto(save(shortBookDto));
     }
 
     @Transactional
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
-    }
-
-    private Book save(long id, String title, long authorId, Set<Long> genresIds) {
-        if (isEmpty(genresIds)) {
-            throw new IllegalArgumentException("Genres ids must not be null");
-        }
-
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
-        var genres = genreRepository.findAllById(genresIds);
-        if (isEmpty(genres) || genresIds.size() != genres.size()) {
-            throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
-        }
-
-        var book = new Book(id, title, author, genres);
-        return bookRepository.save(book);
     }
 
     private Book save(ShortBookDto shortBookDto) {
@@ -119,16 +84,16 @@ public class BookServiceImpl implements BookService {
         boolean isNewBook = book.getId() == 0;
         book = bookRepository.save(book);
         if (isNewBook) {
-            createPermissionForBook(ShortBookDto.toDto(book));
+            createPermissionForBook(book);
         }
         return book;
     }
 
-    private void createPermissionForBook(ShortBookDto shortBookDto) {
+    private void createPermissionForBook(Book book) {
         Set<Permission> permissions = Set.of(
                 BasePermission.READ,
                 BasePermission.WRITE
         );
-        aclServiceWrapperService.createPermission(shortBookDto, permissions);
+        aclServiceWrapperService.createPermission(book, permissions);
     }
 }

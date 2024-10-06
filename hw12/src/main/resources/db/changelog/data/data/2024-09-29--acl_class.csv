@@ -1,2 +1,2 @@
 class
-ru.otus.hw.dto.ShortBookDto
+ru.otus.hw.models.Book

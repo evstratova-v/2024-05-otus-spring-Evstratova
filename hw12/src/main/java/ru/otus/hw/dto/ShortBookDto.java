@@ -35,13 +35,4 @@ public class ShortBookDto {
                 genres.stream().map(GenreDto::getId).toList()
         );
     }
-
-    public static ShortBookDto toDto(BookDto bookDto) {
-        return new ShortBookDto(
-                bookDto.getId(),
-                bookDto.getTitle(),
-                bookDto.getAuthor().getId(),
-                bookDto.getGenres().stream().map(GenreDto::getId).toList()
-        );
-    }
 }
