@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0004-Create-acl_class
+      author: evstratova-v
+      createTable:
+        tableName: acl_class
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+                nullable: false
+                autoIncrement: true
+          - column:
+              name: class
+              type: varchar(100)
+              constraints:
+                nullable: false
+                unique: true
+                uniqueConstraintName: unique_uk_2

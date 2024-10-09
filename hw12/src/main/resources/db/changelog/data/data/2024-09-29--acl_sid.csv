@@ -1,0 +1,8 @@
+principal;sid
+0;ROLE_ADMIN
+0;ROLE_READER
+1;reader1
+1;reader2
+1;reader_and_publisher
+1;publisher
+1;admin

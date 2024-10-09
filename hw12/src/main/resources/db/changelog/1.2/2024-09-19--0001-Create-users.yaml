@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-19--0001-Create-users
+      author: evstratova-v
+      createTable:
+        tableName: users
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: username
+              type: varchar(30)
+          - column:
+              name: password
+              type: varchar(60)

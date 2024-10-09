@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0003-Create-acl_sid
+      author: evstratova-v
+      createTable:
+        tableName: acl_sid
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+                nullable: false
+                autoIncrement: true
+          - column:
+              name: principal
+              type: boolean
+              constraints:
+                nullable: false
+                unique: true
+                uniqueConstraintName: unique_uk_1
+          - column:
+              name: sid
+              type: varchar(100)
+              constraints:
+                nullable: false
+                unique: true
+                uniqueConstraintName: unique_uk_1

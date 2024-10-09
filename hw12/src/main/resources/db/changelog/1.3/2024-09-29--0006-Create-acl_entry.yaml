@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0006-Create-acl_entry
+      author: evstratova-v
+      createTable:
+        tableName: acl_entry
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+                nullable: false
+                autoIncrement: true
+          - column:
+              name: acl_object_identity
+              type: bigint
+              constraints:
+                nullable: false
+                foreignKeyName: foreign_fk_4
+                references: acl_object_identity(id)
+                deleteCascade: true
+                unique: true
+                uniqueConstraintName: unique_uk_4
+          - column:
+              name: ace_order
+              type: int
+              constraints:
+                nullable: false
+                unique: true
+                uniqueConstraintName: unique_uk_4
+          - column:
+              name: sid
+              type: bigint
+              constraints:
+                nullable: false
+                foreignKeyName: foreign_fk_5
+                references: acl_sid(id)
+                deleteCascade: true
+          - column:
+              name: mask
+              type: int
+              constraints:
+                nullable: false
+          - column:
+              name: granting
+              type: boolean
+              constraints:
+                nullable: false
+          - column:
+              name: audit_success
+              type: boolean
+              constraints:
+                nullable: false
+          - column:
+              name: audit_failure
+              type: boolean
+              constraints:
+                nullable: false
