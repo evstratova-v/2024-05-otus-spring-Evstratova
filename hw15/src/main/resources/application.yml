@@ -18,3 +18,29 @@ spring:
         format_sql: true
 
     open-in-view: false
+
+  data:
+    rest:
+      basePath: /datarest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    root: info
+  file:
+    name: ./logs/library.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: ./logs/library.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 10MB
