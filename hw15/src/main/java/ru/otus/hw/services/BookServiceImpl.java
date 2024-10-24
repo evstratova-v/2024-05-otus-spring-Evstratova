@@ -34,6 +34,12 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
+    public Optional<BookDto> findFirst() {
+        return bookRepository.findFirstByOrderById().map(BookDto::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Optional<ShortBookDto> findShortBookById(long id) {
         return bookRepository.findById(id).map(ShortBookDto::toDto);
     }

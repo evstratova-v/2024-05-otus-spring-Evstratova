@@ -15,7 +15,7 @@ public class BooksHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        if (bookService.findAll().isEmpty()) {
+        if (bookService.findFirst().isEmpty()) {
             return Health.down()
                     .status(Status.DOWN)
                     .withDetail("message", "В библиотеке нет книг!")

@@ -20,4 +20,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @RestResource(path = "titles", rel = "titles")
     Optional<Book> findByTitle(String title);
+
+    @RestResource(exported = false)
+    Optional<Book> findFirstByOrderById();
 }

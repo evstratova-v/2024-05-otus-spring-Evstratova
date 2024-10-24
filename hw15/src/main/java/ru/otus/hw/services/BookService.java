@@ -10,6 +10,8 @@ import java.util.Set;
 public interface BookService {
     Optional<BookDto> findById(long id);
 
+    Optional<BookDto> findFirst();
+
     Optional<ShortBookDto> findShortBookById(long id);
 
     List<BookDto> findAll();
