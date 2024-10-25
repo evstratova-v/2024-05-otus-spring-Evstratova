@@ -15,13 +15,13 @@ public class BooksHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        if (bookService.findFirst().isEmpty()) {
+        if (bookService.exist()) {
+            return Health.up().withDetail("message", "В библиотеке есть книги").build();
+        } else {
             return Health.down()
                     .status(Status.DOWN)
                     .withDetail("message", "В библиотеке нет книг!")
                     .build();
-        } else {
-            return Health.up().withDetail("message", "В библиотеке есть книги").build();
         }
     }
 }
