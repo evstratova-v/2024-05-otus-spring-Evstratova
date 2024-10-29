@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw09-spring-mvc-view</artifactId>
+    <artifactId>hw16-docker</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-mvc-view-homework</name>
+    <name>docker-homework</name>
 
     <properties>
         <java.version>17</java.version>
@@ -50,6 +50,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -74,6 +75,12 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>${reflections.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -106,6 +113,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>hw16</finalName>
     </build>
 
 </project>

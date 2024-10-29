@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hw16-config
+data:
+  datasourceUrl: "jdbc:postgresql://postgres-service:5432/postgres"
