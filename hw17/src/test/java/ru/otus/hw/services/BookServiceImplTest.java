@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
+import ru.otus.hw.dto.ShortBookDto;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,13 +51,13 @@ public class BookServiceImplTest {
 
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
-    @MethodSource("getDtoBooks")
-    void shouldReturnCorrectBookById(BookDto expectedBookDto) {
-        var actualBookDto = bookService.findById(expectedBookDto.getId());
+    @MethodSource("getShortBookDto")
+    void shouldReturnCorrectBookById(ShortBookDto expectedShortBookDto) {
+        var actualShortBookDto = bookService.findShortBookById(expectedShortBookDto.getId());
 
-        assertThat(actualBookDto).isPresent()
+        assertThat(actualShortBookDto).isPresent()
                 .get()
-                .isEqualTo(expectedBookDto);
+                .isEqualTo(expectedShortBookDto);
     }
 
     @DisplayName("должен загружать список всех книг")
@@ -73,8 +73,9 @@ public class BookServiceImplTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var actualBookDto = bookService.insert("BookTitle_10500", dbAuthors.get(0).getId(),
-                Set.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
+        var shortBookDto = new ShortBookDto(0L, "BookTitle_10500", dbAuthors.get(0).getId(),
+                List.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
+        var actualBookDto = bookService.insert(shortBookDto);
 
         var expectedBookDto = new BookDto(dtoBooks.size() + 1, "BookTitle_10500",
                 AuthorDto.toDto(dbAuthors.get(0)),
@@ -86,8 +87,9 @@ public class BookServiceImplTest {
     @DisplayName("должен сохранять измененную книгу")
     @Test
     void shouldSaveUpdatedBook() {
-        var actualBookDto = bookService.update(FIRST_BOOK_ID, "BookTitle_10500", dbAuthors.get(0).getId(),
-                Set.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
+        var shortBookDto = new ShortBookDto(FIRST_BOOK_ID, "BookTitle_10500", dbAuthors.get(0).getId(),
+                List.of(dbGenres.get(0).getId(), dbGenres.get(2).getId()));
+        var actualBookDto = bookService.update(shortBookDto);
 
 
         var expectedBookDto = new BookDto(FIRST_BOOK_ID, "BookTitle_10500",
@@ -101,11 +103,11 @@ public class BookServiceImplTest {
     @DisplayName("должен удалять книгу по id")
     @Test
     void shouldDeleteBook() {
-        assertThat(bookService.findById(FIRST_BOOK_ID)).isNotEmpty();
+        assertThat(bookService.findShortBookById(FIRST_BOOK_ID)).isNotEmpty();
 
         assertThatCode(() -> bookService.deleteById(FIRST_BOOK_ID)).doesNotThrowAnyException();
 
-        assertThat(bookService.findById(FIRST_BOOK_ID)).isEmpty();
+        assertThat(bookService.findShortBookById(FIRST_BOOK_ID)).isEmpty();
     }
 
     private static List<Author> getDbAuthors() {
@@ -120,20 +122,23 @@ public class BookServiceImplTest {
                 .toList();
     }
 
-    private static List<BookDto> getDtoBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
+    private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
         return IntStream.range(1, 4).boxed()
                 .map(id -> new Book(id,
                         "BookTitle_" + id,
                         dbAuthors.get(id - 1),
                         dbGenres.subList((id - 1) * 2, (id - 1) * 2 + 2)
                 ))
-                .map(BookDto::toDto)
                 .toList();
     }
 
-    private static List<BookDto> getDtoBooks() {
+    private static List<BookDto> getDtoBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
+        return getDbBooks(dbAuthors, dbGenres).stream().map(BookDto::toDto).toList();
+    }
+
+    private static List<ShortBookDto> getShortBookDto() {
         var dbAuthors = getDbAuthors();
         var dbGenres = getDbGenres();
-        return getDtoBooks(dbAuthors, dbGenres);
+        return getDbBooks(dbAuthors, dbGenres).stream().map(ShortBookDto::toDto).toList();
     }
 }

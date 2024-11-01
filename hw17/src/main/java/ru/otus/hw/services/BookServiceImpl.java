@@ -13,7 +13,6 @@ import ru.otus.hw.repositories.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
@@ -25,12 +24,6 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
 
     private final BookRepository bookRepository;
-
-    @Transactional(readOnly = true)
-    @Override
-    public Optional<BookDto> findById(long id) {
-        return bookRepository.findById(id).map(BookDto::toDto);
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -46,20 +39,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public BookDto insert(String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(0, title, authorId, genresIds));
-    }
-
-    @Transactional
-    @Override
     public BookDto insert(ShortBookDto shortBookDto) {
         return BookDto.toDto(save(shortBookDto));
-    }
-
-    @Transactional
-    @Override
-    public BookDto update(long id, String title, long authorId, Set<Long> genresIds) {
-        return BookDto.toDto(save(id, title, authorId, genresIds));
     }
 
     @Transactional
@@ -72,22 +53,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
-    }
-
-    private Book save(long id, String title, long authorId, Set<Long> genresIds) {
-        if (isEmpty(genresIds)) {
-            throw new IllegalArgumentException("Genres ids must not be null");
-        }
-
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
-        var genres = genreRepository.findAllById(genresIds);
-        if (isEmpty(genres) || genresIds.size() != genres.size()) {
-            throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
-        }
-
-        var book = new Book(id, title, author, genres);
-        return bookRepository.save(book);
     }
 
     private Book save(ShortBookDto shortBookDto) {
