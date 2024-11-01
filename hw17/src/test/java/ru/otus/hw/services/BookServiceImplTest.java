@@ -7,10 +7,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.config.CachingConfig;
 import ru.otus.hw.dto.AuthorDto;
 import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.dto.GenreDto;
@@ -27,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DisplayName("Сервис для работы с книгами ")
 @DataJpaTest
-@Import({BookServiceImpl.class})
+@Import({BookServiceImpl.class, CachingConfig.class})
 @Transactional(propagation = Propagation.NEVER)
 public class BookServiceImplTest {
 
@@ -35,6 +37,9 @@ public class BookServiceImplTest {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     private List<Author> dbAuthors;
 
