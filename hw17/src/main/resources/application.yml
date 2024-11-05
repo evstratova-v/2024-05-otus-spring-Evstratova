@@ -22,3 +22,15 @@ spring:
         format_sql: true
 
     open-in-view: false
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      slowCallDurationThreshold: 5s
+      slowCallRateThreshold: 50
