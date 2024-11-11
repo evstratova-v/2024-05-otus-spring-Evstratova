@@ -1,22 +1,25 @@
 package ru.otus.hw.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+import java.util.List;
+
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "authors")
-public class Author {
+@Document(collection = "books")
+public class BookWithoutComments {
+
     @Id
     private String id;
 
-    private String fullName;
+    private String title;
 
-    public Author(String fullName) {
-        this.fullName = fullName;
-    }
+    private Author author;
+
+    private List<Genre> genres;
 }

@@ -3,6 +3,7 @@ package ru.otus.hw.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.otus.hw.models.Book;
+import ru.otus.hw.models.BookWithoutComments;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BookDto {
 
-    private long id;
+    private String id;
 
     private String title;
 
@@ -19,6 +20,11 @@ public class BookDto {
     private List<GenreDto> genres;
 
     public static BookDto toDto(Book book) {
+        List<GenreDto> genres = book.getGenres().stream().map(GenreDto::toDto).toList();
+        return new BookDto(book.getId(), book.getTitle(), AuthorDto.toDto(book.getAuthor()), genres);
+    }
+
+    public static BookDto toDto(BookWithoutComments book) {
         List<GenreDto> genres = book.getGenres().stream().map(GenreDto::toDto).toList();
         return new BookDto(book.getId(), book.getTitle(), AuthorDto.toDto(book.getAuthor()), genres);
     }
