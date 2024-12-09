@@ -33,11 +33,11 @@ public class GameController {
 
     private final GameService gameService;
 
-    private final GameAchievementClient gameAchievementClient;
+    private final GameAchievementService gameAchievementService;
 
-    private final GamePriceClient gamePriceClient;
+    private final GamePriceService gamePriceService;
 
-    private final ReviewRatingClient reviewRatingClient;
+    private final ReviewRatingService reviewRatingService;
 
     @Operation(summary = "Get games by optional params", description = "Returns list of ShortGameResponse")
     @GetMapping("/api/v1/game")
@@ -58,11 +58,11 @@ public class GameController {
     @Operation(summary = "Get game info by id", description = "Returns GameInfoResponse")
     @GetMapping("/api/v1/game/{game_id}")
     public GameInfoResponse getGame(@PathVariable("game_id") long gameId) {
-        AchievementResponse achievementResponse = gameAchievementClient.getAchievements(gameId);
-        long price = gamePriceClient.getPrice(gameId);
+        AchievementResponse achievementResponse = gameAchievementService.getAchievements(gameId);
+        long price = gamePriceService.getPrice(gameId);
         GameDto gameDto = gameService.findById(gameId)
                 .orElseThrow(() -> new EntityNotFoundException("Game with id %s not found".formatted(gameId)));
-        String rating = reviewRatingClient.getRating(gameId);
+        String rating = reviewRatingService.getRating(gameId);
 
         return new GameInfoResponse(gameDto, achievementResponse, price, rating);
     }

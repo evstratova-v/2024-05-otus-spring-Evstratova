@@ -30,7 +30,7 @@ public class AchievementHistoryController {
 
     private final AchievementService achievementService;
 
-    private final OrderServiceClient orderServiceClient;
+    private final OrderService orderService;
 
     @Operation(summary = "Get achievement history for user", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/api/v1/achievement-history")
@@ -57,7 +57,7 @@ public class AchievementHistoryController {
         AchievementDto achievementDto = achievementService.findById(achievementId).orElseThrow(
                 () -> new AchievementNotFoundException("Achievement with id %s not found".formatted(achievementId))
         );
-        orderServiceClient.checkGamePaid(achievementDto.getGameId(), userId);
+        orderService.checkGamePaid(achievementDto.getGameId(), userId);
 
         return achievementHistoryService.insert(userId, achievementDto);
     }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient("order-service")
-public interface GamePriceClient {
+public interface GamePriceService {
 
     @CircuitBreaker(name = "getPrice")
     @GetMapping("/api/v1/product/{game_id}/price")

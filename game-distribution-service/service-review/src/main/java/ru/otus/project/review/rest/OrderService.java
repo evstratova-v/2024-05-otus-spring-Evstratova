@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient("order-service")
-public interface OrderServiceClient {
+public interface OrderService {
 
     @GetMapping("/api/v1/product/ordered/{game_id}")
     @CircuitBreaker(name = "checkGamePaid")

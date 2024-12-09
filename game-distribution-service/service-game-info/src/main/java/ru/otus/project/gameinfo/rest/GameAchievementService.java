@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.project.gameinfo.dto.AchievementResponse;
 
 @FeignClient("achievement-service")
-public interface GameAchievementClient {
+public interface GameAchievementService {
 
     @CircuitBreaker(name = "getAchievements")
     @GetMapping("/api/v1/achievement")

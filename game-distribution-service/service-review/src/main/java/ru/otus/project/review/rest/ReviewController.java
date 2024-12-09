@@ -33,7 +33,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final OrderServiceClient orderServiceClient;
+    private final OrderService orderService;
 
     @Operation(summary = "Find all reviews by game id", description = "Returns list of ReviewDto")
     @GetMapping("/api/v1/review")
@@ -49,7 +49,7 @@ public class ReviewController {
         long userId = Long.parseLong(principal.getClaims().get("userId").toString());
         long gameId = createReviewRequest.getGameId();
 
-        orderServiceClient.checkGamePaid(gameId, userId);
+        orderService.checkGamePaid(gameId, userId);
 
         return reviewService.insert(userId, createReviewRequest);
     }
