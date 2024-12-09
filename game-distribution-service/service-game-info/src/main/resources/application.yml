@@ -1,0 +1,88 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: game-info-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dbGames
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: never
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+    open-in-view: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:app.pub
+
+eureka:
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    metadataMap:
+      zone: zone1
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      probes:
+        enabled: true
+    refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - refresh
+    enabled-by-default: false
+
+openapi:
+  service:
+    title: game-info-service doc
+    version: 1.0.0
+    url: http://localhost:8080
+springdoc:
+  api-docs:
+    path: /game-info-service/v3/api-docs
+  swagger-ui:
+    path: /game-info-service/swagger-ui.html
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      slowCallDurationThreshold: 5s
+      slowCallRateThreshold: 50

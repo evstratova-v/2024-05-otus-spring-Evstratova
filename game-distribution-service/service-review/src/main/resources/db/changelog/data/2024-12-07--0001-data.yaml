@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--reviews
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--reviews.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: reviews

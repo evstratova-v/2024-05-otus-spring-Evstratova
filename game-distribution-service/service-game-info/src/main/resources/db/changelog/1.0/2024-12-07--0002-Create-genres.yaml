@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0002-Create-genres
+      author: evstratova-v
+      createTable:
+        tableName: genres
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: name
+              type: varchar(255)

@@ -1,0 +1,16 @@
+game_id;name;description;is_hidden
+1;Achievement_1;Description_1;false
+1;Achievement_2;Description_2;false
+1;Achievement_3;Description_3;true
+2;Achievement_4;Description_4;false
+2;Achievement_5;Description_5;true
+2;Achievement_6;Description_6;true
+3;Achievement_7;Description_7;false
+3;Achievement_8;Description_8;false
+3;Achievement_9;Description_9;true
+4;Achievement_10;Description_10;false
+4;Achievement_11;Description_11;true
+4;Achievement_12;Description_12;true
+5;Achievement_13;Description_13;false
+5;Achievement_14;Description_14;false
+5;Achievement_15;Description_15;true

@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0003-Create-games
+      author: evstratova-v
+      createTable:
+        tableName: games
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: title
+              type: varchar(255)
+          - column:
+              name: description
+              type: varchar(3000)
+          - column:
+              name: developer_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_games_developers
+                references: developers(id)
+                deleteCascade: true
+          - column:
+              name: minimum_os
+              type: varchar(255)
+          - column:
+              name: minimum_cpu
+              type: varchar(255)
+          - column:
+              name: minimum_ram
+              type: varchar(255)
+          - column:
+              name: minimum_gpu
+              type: varchar(255)
+          - column:
+              name: minimum_storage
+              type: varchar(255)
+          - column:
+              name: recommended_os
+              type: varchar(255)
+          - column:
+              name: recommended_cpu
+              type: varchar(255)
+          - column:
+              name: recommended_ram
+              type: varchar(255)
+          - column:
+              name: recommended_gpu
+              type: varchar(255)
+          - column:
+              name: recommended_storage
+              type: varchar(255)

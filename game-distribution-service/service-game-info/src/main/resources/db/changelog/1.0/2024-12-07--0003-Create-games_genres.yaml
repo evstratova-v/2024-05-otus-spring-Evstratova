@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0003-Create-games_genres
+      author: evstratova-v
+      createTable:
+        tableName: games_genres
+        columns:
+          - column:
+              name: game_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                foreignKeyName: fk_games_genres_games
+                references: games(id)
+                deleteCascade: true
+          - column:
+              name: genre_id
+              type: bigint
+              constraints:
+                primaryKey: true
+                foreignKeyName: fk_games_genres_genres
+                references: genres(id)
+                deleteCascade: true

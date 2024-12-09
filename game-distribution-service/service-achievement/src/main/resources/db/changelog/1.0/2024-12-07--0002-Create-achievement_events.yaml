@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0002-Create-achievement_events
+      author: evstratova-v
+      createTable:
+        tableName: achievement_events
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: user_id
+              type: bigint
+          - column:
+              name: event_time
+              type: datetime
+          - column:
+              name: achievement_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_achievement_events_achievements
+                references: achievements(id)
+                deleteCascade: true
+      addUniqueConstraint:
+        tableName: achievement_events
+        columnNames: user_id, achievement_id
+        constraintName: user_achievement_constraint
