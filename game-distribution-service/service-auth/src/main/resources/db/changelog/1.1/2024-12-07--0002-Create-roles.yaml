@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-09-29--0001-Create-roles
+      author: evstratova-v
+      createTable:
+        tableName: roles
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: name
+              type: varchar(100)

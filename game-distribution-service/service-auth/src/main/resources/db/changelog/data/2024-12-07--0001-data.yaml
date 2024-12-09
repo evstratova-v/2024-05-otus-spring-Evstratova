@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--users
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--users.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: users
+
+  - changeSet:
+      id: 2024-12-07--roles
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--roles.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: roles
+
+  - changeSet:
+      id: 2024-12-07--users_roles
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--users_roles.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: users_roles

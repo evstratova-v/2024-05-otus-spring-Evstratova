@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0002-Create-game_orders
+      author: evstratova-v
+      createTable:
+        tableName: game_orders
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: game_id
+              type: bigint
+              constraints:
+                foreignKeyName: fk_game_orders_game_products
+                references: game_products(game_id)
+                deleteCascade: true
+          - column:
+              name: user_id
+              type: bigint
+          - column:
+              name: cost
+              type: bigint
+          - column:
+              name: created
+              type: datetime
+          - column:
+              name: paid
+              type: boolean
+      addUniqueConstraint:
+        tableName: game_orders
+        columnNames: game_id, user_id
+        constraintName: game_user_constraint

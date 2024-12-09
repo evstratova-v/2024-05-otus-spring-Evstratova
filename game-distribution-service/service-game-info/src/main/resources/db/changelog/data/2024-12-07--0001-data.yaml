@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--developers
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--developers.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: developers
+  - changeSet:
+      id: 2024-12-07--genres
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--genres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: genres
+  - changeSet:
+      id: 2024-12-07--games
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--games.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: games
+  - changeSet:
+      id: 2024-12-07--games_genres
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--games_genres.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: games_genres

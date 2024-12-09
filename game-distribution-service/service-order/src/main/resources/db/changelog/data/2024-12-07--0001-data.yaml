@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--game_products
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: game_id
+        file: data/2024-12-07--game_products.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: game_products
+  - changeSet:
+      id: 2024-12-07--game_orders
+      author: evstratova-v
+      context: main
+      runOnChange: true
+      loadData:
+        primaryKey: id
+        file: data/2024-12-07--game_orders.csv
+        relativeToChangelogFile: true
+        separator: ;
+        quotChar: '"'
+        encoding: UTF-8
+        tableName: game_orders

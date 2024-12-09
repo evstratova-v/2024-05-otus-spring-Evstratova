@@ -1,0 +1,109 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+    ports:
+      - "8080:8080"
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+  service-achievement:
+    build:
+      context: ./service-achievement
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-achievement:5432/dbAchievements
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+      - TZ=Europe/Moscow
+  service-auth:
+    build:
+      context: ./service-auth
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/dbAuth
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+  service-game-info:
+    build:
+      context: ./service-game-info
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-game-info:5432/dbGames
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+      - TZ=Europe/Moscow
+  service-order:
+    build:
+      context: ./service-order
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5432/dbOrders
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+      - TZ=Europe/Moscow
+  service-review:
+    build:
+      context: ./service-review
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-review:5432/dbReviews
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/
+      - management.zipkin.tracing.endpoint=http://zipkin:9411/api/v2/spans
+      - TZ=Europe/Moscow
+
+  postgres-auth:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dbAuth
+  postgres-game-info:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dbGames
+  postgres-order:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dbOrders
+  postgres-review:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dbReviews
+  postgres-achievement:
+    image: "postgres:13"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dbAchievements
+
+  zipkin:
+    image: ghcr.io/openzipkin/zipkin-slim:${TAG:-latest}
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - 9411:9411

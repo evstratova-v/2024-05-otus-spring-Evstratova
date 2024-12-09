@@ -1,0 +1,67 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway Service
+        primaryName: API Gateway Service
+      - url: /achievement-service/v3/api-docs
+        name: Achievement Service
+        primaryName: Achievement Service
+      - url: /order-service/v3/api-docs
+        name: Order Service
+        primaryName: Order Service
+      - url: /auth-service/v3/api-docs
+        name: Auth Service
+        primaryName: Auth Service
+      - url: /review-service/v3/api-docs
+        name: Review Service
+        primaryName: Review Service
+      - url: /game-info-service/v3/api-docs
+        name: Game Info Service
+        primaryName: Game Info Service
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    metadataMap:
+      zone: zone1
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      probes:
+        enabled: true
+    refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - refresh
+    enabled-by-default: false

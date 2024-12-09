@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0001-Create-game_products
+      author: evstratova-v
+      createTable:
+        tableName: game_products
+        columns:
+          - column:
+              name: game_id
+              type: bigint
+              constraints:
+                primaryKey: true
+          - column:
+              name: price
+              type: bigint
+          - column:
+              name: created_by
+              type: bigint

@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0001-Create-reviews
+      author: evstratova-v
+      createTable:
+        tableName: reviews
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: game_id
+              type: bigint
+          - column:
+              name: recommended
+              type: boolean
+          - column:
+              name: comment
+              type: varchar(3000)
+          - column:
+              name: created
+              type: datetime
+          - column:
+              name: updated
+              type: datetime
+          - column:
+              name: user_id
+              type: bigint
+      addUniqueConstraint:
+        tableName: reviews
+        columnNames: game_id, user_id
+        constraintName: game_user_constraint

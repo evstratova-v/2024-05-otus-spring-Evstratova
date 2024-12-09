@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-12-07--0001-Create-developers
+      author: evstratova-v
+      createTable:
+        tableName: developers
+        columns:
+          - column:
+              name: id
+              type: bigserial
+              constraints:
+                primaryKey: true
+          - column:
+              name: full_name
+              type: varchar(255)
